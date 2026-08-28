@@ -1,0 +1,69 @@
+# Fork-maintenance for softwarebyze/react-native-template-obytes only.
+# create-obytes-app copies this tree into new apps; the job-level
+# repository guard keeps those generated apps from syncing Obytes.
+#
+# Pulls obytes/react-native-template-obytes master into a PR so unique
+# fork commits are never force-pushed. Clean PRs auto-merge; conflicts
+# stay open for a human.
+
+name: Sync upstream
+
+on:
+  schedule:
+    # Weekdays 9:00am Eastern (EDT). EST would be 14:00 UTC.
+    - cron: '0 13 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.repository == 'softwarebyze/react-native-template-obytes'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open or merge upstream sync PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git remote add upstream https://github.com/obytes/react-native-template-obytes.git
+          git fetch --no-tags origin master
+          git fetch --no-tags upstream master
+
+          if git merge-base --is-ancestor refs/remotes/upstream/master refs/remotes/origin/master; then
+            echo "Already up to date with obytes/master"
+            exit 0
+          fi
+
+          git checkout -B chore/sync-upstream refs/remotes/upstream/master
+          if git ls-remote --exit-code origin refs/heads/chore/sync-upstream >/dev/null 2>&1; then
+            git push origin chore/sync-upstream --force-with-lease
+          else
+            git push -u origin chore/sync-upstream
+          fi
+
+          COMMITS=$(git log --oneline origin/master..upstream/master | head -50)
+          BODY=$(printf 'Incoming from [obytes/react-native-template-obytes](https://github.com/obytes/react-native-template-obytes):\n\n```\n%s\n```\n\nOpened by `.github/workflows/sync-upstream.yml`. If this conflicts with fork customizations, resolve here. Do not force-push `master`.' "$COMMITS")
+
+          PR=$(gh pr list --head chore/sync-upstream --base master --state open --json number --jq '.[0].number // empty')
+          if [ -n "$PR" ]; then
+            gh pr edit "$PR" --title "chore: sync upstream from obytes" --body "$BODY"
+          else
+            gh pr create --base master --head chore/sync-upstream --title "chore: sync upstream from obytes" --body "$BODY"
+          fi
+
+          gh pr merge --squash --auto || gh pr merge --squash || echo "Left PR open (conflicts or merge blocked)"
