@@ -50,6 +50,14 @@ export default function TabLayout() {
           tabBarButtonTestID: 'settings-tab',
         }}
       />
+      <Tabs.Screen
+        name="language"
+        options={{
+          href: null,
+          title: "Language",
+          headerShown: true,
+        }}
+      />
     </Tabs>
   );
 }
