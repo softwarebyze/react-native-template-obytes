@@ -13,6 +13,9 @@
 #        `ANDROID`, true by default, set to true if you don't want to trigger build for Android.
 #        `IOS`, false by default, set to true if you  want to trigger build for IOS.
 
+# Before triggering the build, we run a pre-build script to generate the necessary native folders based on the APP_ENV.
+# Based on the ANDROID and IOS inputs, we trigger the build for the corresponding platform with the corresponding flags.
+
 # 👀 Example usage:
 #      - name: ⏱️ EAS Build
 #        uses: ./.github/actions/eas-build
@@ -67,12 +70,25 @@ runs:
         eas-version: latest
         token: ${{ inputs.EXPO_TOKEN }}
 
+    - name: ⚙️ Run Prebuild
+      run: pnpm prebuild:${{ inputs.APP_ENV }}
+      shell: bash
+
     - name: 📱 Run Android Build
       if: ${{ inputs.ANDROID == 'true' }}
-      run: pnpm build:${{ inputs.APP_ENV }}:android --non-interactive  --no-wait --message "Build  ${{ inputs.APP_ENV }} ${{ inputs.VERSION }}"
+      run: pnpm build:${{ inputs.APP_ENV }}:android --non-interactive --no-wait --message "Build ${{ inputs.APP_ENV }} ${{ inputs.VERSION }}"
       shell: bash
 
     - name: 📱 Run IOS Build
       if: ${{ inputs.IOS == 'true' }}
-      run: pnpm build:${{ inputs.APP_ENV }}:ios --non-interactive  --no-wait --message "Build ${{ inputs.APP_ENV }} ${{ inputs.VERSION }}"
+      run: |
+        SUBMIT_ARGS=""
+        if [ "${{ inputs.AUTO_SUBMIT }}" = "true" ]; then
+          SUBMIT_ARGS="--auto-submit"
+          if [ "${{ inputs.APP_ENV }}" = "preview" ]; then
+            pnpm metadata:preview-config
+            test -f store.preview.config.json
+          fi
+        fi
+        pnpm build:${{ inputs.APP_ENV }}:ios --non-interactive --no-wait ${SUBMIT_ARGS} --message "Build ${{ inputs.APP_ENV }} ${{ inputs.VERSION }}"
       shell: bash
