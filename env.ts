@@ -6,7 +6,9 @@ import packageJSON from './package.json';
 const envSchema = z.object({
   EXPO_PUBLIC_APP_ENV: z.enum(['development', 'preview', 'production']),
   EXPO_PUBLIC_NAME: z.string(),
-  EXPO_PUBLIC_SCHEME: z.string(),
+  // URL schemes must be lowercase or EAS Update publish fails:
+  // scheme must match ^[a-z][a-z0-9+.-]*$
+  EXPO_PUBLIC_SCHEME: z.string().regex(/^[a-z][a-z0-9+.-]*$/),
   EXPO_PUBLIC_BUNDLE_ID: z.string(),
   EXPO_PUBLIC_PACKAGE: z.string(),
   EXPO_PUBLIC_VERSION: z.string(),
@@ -35,10 +37,11 @@ const PACKAGES = {
   production: 'com.obytes',
 } as const;
 
+// Display NAME can stay PascalCase; URL schemes cannot (EAS Update).
 const SCHEMES = {
-  development: 'obytesApp',
-  preview: 'obytesApp.preview',
-  production: 'obytesApp',
+  development: 'obytesapp',
+  preview: 'obytesapp.preview',
+  production: 'obytesapp',
 } as const;
 
 const NAME = 'ObytesApp';
