@@ -45,7 +45,7 @@ Expo native build numbers are managed by EAS (`eas.json` / remote version source
 - [ ] `pnpm check-all` passes
 - [ ] PR merged to `main` (stack: persistence, animations, compound moves, dice roll — see `docs/roadmap.md`)
 - [ ] `docs/evidence/v0.1.x/` updated if UX changed
-- [ ] Maestro smoke green on `main` (or local: `maestro test .maestro/app/backgammon-smoke.yaml -e APP_ID=com.obytes.development`)
+- [ ] Maestro smoke green on `main` (or local: `maestro test .maestro/ -e APP_ID=com.obytes.development`)
 
 ### 2. Bump version
 
