@@ -1,34 +1,41 @@
+import type { ErrorBoundaryProps } from 'expo-router';
 import type { ViewProps } from 'react-native';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import { ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, useGlobalSearchParams, usePathname } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { PostHogErrorBoundary, PostHogProvider } from 'posthog-react-native';
 import * as React from 'react';
+import { useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { PostHogErrorFallback } from '@/components/posthog-error-fallback';
+import { ConfirmDialogHost } from '@/components/ui/confirm-dialog';
 import { useThemeConfig } from '@/components/ui/use-theme-config';
+import { posthog } from '@/config/posthog';
 import { hydrateAuth } from '@/features/auth/use-auth-store';
-
 import { APIProvider } from '@/lib/api';
 import { loadSelectedTheme } from '@/lib/hooks/use-selected-theme';
-// Import  global CSS file
+import '@/lib/ignore-known-logs';
 import '../global.css';
 
-export { ErrorBoundary } from 'expo-router';
+export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+  useEffect(() => {
+    posthog.captureException(error, { source: 'expo-router-error-boundary' });
+  }, [error]);
+  return <PostHogErrorFallback error={error} onRetry={retry} />;
+}
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const unstable_settings = {
   initialRouteName: '(app)',
 };
 
 hydrateAuth();
 loadSelectedTheme();
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-// Set the animation options. This is optional.
 SplashScreen.setOptions({
   duration: 500,
   fade: true,
@@ -36,6 +43,19 @@ SplashScreen.setOptions({
 
 export default function RootLayout() {
   const hasHiddenSplash = React.useRef(false);
+  const pathname = usePathname();
+  const params = useGlobalSearchParams();
+  const previousPathname = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (previousPathname.current !== pathname) {
+      posthog.screen(pathname, {
+        previous_screen: previousPathname.current ?? null,
+        ...params,
+      });
+      previousPathname.current = pathname;
+    }
+  }, [pathname, params]);
 
   const onLayoutRootView = React.useCallback(() => {
     if (hasHiddenSplash.current) {
@@ -66,23 +86,35 @@ function Providers({
 }) {
   const theme = useThemeConfig();
   return (
-    <GestureHandlerRootView
-      onLayout={onLayout}
-      style={styles.container}
-      // eslint-disable-next-line better-tailwindcss/no-unknown-classes
-      className={theme.dark ? `dark` : undefined}
+    <PostHogProvider
+      client={posthog}
+      autocapture={{
+        captureScreens: false,
+        captureTouches: true,
+        propsToCapture: ['testID'],
+        maxElementsCaptured: 20,
+      }}
     >
-      <KeyboardProvider>
-        <ThemeProvider value={theme}>
-          <APIProvider>
-            <BottomSheetModalProvider>
-              {children}
-              <FlashMessage position="top" />
-            </BottomSheetModalProvider>
-          </APIProvider>
-        </ThemeProvider>
-      </KeyboardProvider>
-    </GestureHandlerRootView>
+      <PostHogErrorBoundary fallback={PostHogErrorFallback}>
+        <GestureHandlerRootView
+          onLayout={onLayout}
+          style={styles.container}
+          className={theme.dark ? 'dark' : undefined}
+        >
+          <KeyboardProvider>
+            <ThemeProvider value={theme}>
+              <APIProvider>
+                <BottomSheetModalProvider>
+                  {children}
+                  <ConfirmDialogHost />
+                  <FlashMessage position="top" />
+                </BottomSheetModalProvider>
+              </APIProvider>
+            </ThemeProvider>
+          </KeyboardProvider>
+        </GestureHandlerRootView>
+      </PostHogErrorBoundary>
+    </PostHogProvider>
   );
 }
 
