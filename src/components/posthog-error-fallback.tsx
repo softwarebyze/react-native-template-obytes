@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 import { interFont } from '@/lib/ui/fonts';
 import { continuousRadius } from '@/lib/ui/native-styles';
+import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 
 type Props = {
   error: unknown;

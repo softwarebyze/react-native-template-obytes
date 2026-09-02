@@ -1,9 +1,9 @@
-import type { NativeStackNavigationOptions } from 'expo-router';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 import { Platform } from 'react-native';
 import { translate } from '@/lib/i18n';
-import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 import { interFont } from '@/lib/ui/fonts';
+import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 
 const headerTitleStyle = {
   color: TEMPLATE_PALETTE.accent,

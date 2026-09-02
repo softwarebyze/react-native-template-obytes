@@ -20,7 +20,7 @@ Prefer this over one-off App Store Connect API / JWT scripts. Listing state stay
 | Pull from preview / production | `pnpm metadata:pull` / `pnpm metadata:pull:production` |
 | CI | Actions → **EAS Metadata Push** → pick `preview` or `production` |
 
-Requires: Expo login or `EXPO_TOKEN`, plus App Store Connect API key in **EAS credentials** (already configured: `M7LGZ9S6S2`).
+Requires: Expo login or `EXPO_TOKEN`, plus App Store Connect API key in **EAS credentials** (configure once in EAS credentials as `YOUR_ASC_API_KEY_ID`).
 
 `apple.version` in `store.config.json` must match an **editable** version in that ASC app (currently `1.0.0` for production). If push fails on version, create the matching version in App Store Connect first.
 

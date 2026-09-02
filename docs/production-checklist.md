@@ -28,16 +28,16 @@ Use this before the first App Store / Play Store submission.
 ## Pre-release engineering
 
 - [x] `pnpm check-all` passes locally
-- [x] Game engine + turn-display tests pass
+- [ ] Unit tests pass
 - [x] Maestro smoke E2E passes (GitHub emulator, auto on app changes)
-- [ ] **Manual playtest on iPhone** — latest **preview** binary: vs Computer + 2-player, full game to win, Resume, Learn to Play
+- [ ] **Manual playtest on iPhone** — latest **preview** binary: onboarding, auth, and sample feed
 - [x] Settings links wired (GitHub, privacy, terms, share, rate)
-- [x] Turn indicator — clear white/black whose-turn UI (PR #23)
+- [x] Replace demo feed UI with your product
 - [x] App Store listing source — `store.config.json` (EAS Metadata)
-- [x] Review phone: `+1 954 593 1670` in store config
-- [x] `EXPO_PUBLIC_APP_STORE_ID` in EAS **production** env = **`YOUR_PRODUCTION_ASC_APP_ID`**
-- [x] Contact email: `YOUR_EXPO_ACCOUNT@gmail.com` in app + legal docs
-- [x] Hosted privacy / terms — https://obytesapp.vercel.app/privacy/ + `/terms/` (PR #129)
+- [ ] Review phone: `YOUR_REVIEW_PHONE` in store config
+- [ ] `EXPO_PUBLIC_APP_STORE_ID` in EAS **production** env = **`YOUR_PRODUCTION_ASC_APP_ID`**
+- [ ] Contact email: `YOUR_EXPO_ACCOUNT@gmail.com` in app + legal docs
+- [ ] Hosted privacy / terms — https://obytesapp.vercel.app/privacy/ + `/terms/` (PR #129)
 
 ## Versioning & builds
 
@@ -52,20 +52,20 @@ Use this before the first App Store / Play Store submission.
 
 ## Store listing requirements
 
-- [x] App Store listing copy — `store.config.json` (push via EAS Metadata)
-- [x] **App Store Connect API key** — via EAS credentials for `eas metadata` / submit
-- [x] `pnpm metadata:push` — preview ASC (`YOUR_PREVIEW_ASC_APP_ID`); generates `store.preview.config.json` with title **ObytesApp Preview**
-- [x] `pnpm metadata:push:production` — production ASC (`YOUR_PRODUCTION_ASC_APP_ID`)
+- [ ] App Store listing copy — `store.config.json` (push via EAS Metadata)
+- [ ] **App Store Connect API key** — via EAS credentials for `eas metadata` / submit
+- [ ] `pnpm metadata:push` — preview ASC (`YOUR_PREVIEW_ASC_APP_ID`); generates `store.preview.config.json` with title **ObytesApp Preview**
+- [ ] `pnpm metadata:push:production` — production ASC (`YOUR_PRODUCTION_ASC_APP_ID`)
 - [ ] App Store screenshots matching shipped UI (Learn still in the app) — [store-screenshots.md](./store-screenshots.md); Fastlane or EAS Metadata
 - [ ] Google Play Console app record + screenshots + description
-- [x] Privacy policy — https://obytesapp.vercel.app/privacy/
-- [x] Terms of service — hosted `/terms/`
-- [x] Pricing — Paid Up Front **$4.99** USD (ASC Pricing UI)
+- [ ] Privacy policy — https://obytesapp.vercel.app/privacy/
+- [ ] Terms of service — hosted `/terms/`
+- [ ] Pricing — Paid Up Front **$4.99** USD (ASC Pricing UI)
 - [x] Marketing / privacy URLs — in store config; sync with metadata push
 - [ ] Privacy nutrition labels — declare analytics (PostHog product interaction) in ASC UI
 - [x] iOS age rating — via store config → `apple.advisory` + metadata push (4+)
 - [ ] Google Play content rating questionnaire
-- [x] Production ASC app — `com.obytes` / Apple ID `YOUR_PRODUCTION_ASC_APP_ID`
+- [ ] Production ASC app — `com.obytes` / Apple ID `YOUR_PRODUCTION_ASC_APP_ID`
 - [x] Export compliance — `ITSAppUsesNonExemptEncryption: false` in `app.config.ts`
 
 ## Secrets checklist

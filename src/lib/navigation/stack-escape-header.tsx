@@ -1,13 +1,11 @@
-import type { NativeStackNavigationOptions } from 'expo-router';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
 
 import { AlwaysOnEscapeHeader } from '@/components/navigation/always-on-escape-header';
 import { StackEscapeButton } from '@/components/navigation/stack-escape-button';
 
-type EscapeHeaderOptions = Pick<
-  NativeStackNavigationOptions,
-  'header' | 'headerLeft' | 'headerBackVisible'
->;
+type EscapeHeaderOptions = Pick<NativeStackNavigationOptions, 'headerBackVisible'>
+  & Partial<Pick<NativeStackNavigationOptions, 'header' | 'headerLeft'>>;
 
 /**
  * Leading chevron that native-stack will not drop when the stack is empty

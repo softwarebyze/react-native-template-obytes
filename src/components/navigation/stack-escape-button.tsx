@@ -1,5 +1,5 @@
+import { HeaderButton } from '@react-navigation/elements';
 import { Text } from 'react-native';
-import { HeaderButton } from 'expo-router/react-navigation';
 
 import { goBackOrHome } from '@/lib/navigation/go-back-or-home';
 import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';

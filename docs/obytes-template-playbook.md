@@ -349,7 +349,7 @@ eslint_flags: 'src app.config.ts env.ts .maestro --ext .js,.jsx,.ts,.tsx'
 
 #### Maestro E2E (demo auth/app flows)
 
-Single flow: `.maestro/app/demo-flows` (home → vs computer → assert board).
+Stock demo Maestro flows cover onboarding, auth, and the sample feed.
 
 | Trigger | Label / command | Secret |
 | ------- | ---------------- | ------ |
@@ -364,7 +364,7 @@ pnpm install-maestro   # once
 pnpm e2e-smoke         # or pnpm e2e-test (same flow)
 ```
 
-`.maestro/config.yaml` lists only `app/demo-flows` (demo auth/onboarding flows removed).
+Keep the template demo Maestro flows (auth/onboarding/feed). Replace them with product flows per app.
 
 Bundle IDs — replace template `com.obytes.*` in:
 
@@ -388,7 +388,7 @@ You do **not** need to unzip `e2e-test-logs` to see what happened:
 | **Checks tab** | `Maestro E2E` JUnit breakdown (`dorny/test-reporter`) |
 | **Artifact `maestro-visual-report`** | `index.html` gallery, `e2e-recording.mp4`, PNGs, `report.xml`, logs |
 
-The smoke flow uses `takeScreenshot` at home, board, after roll, and completion. CI runs `adb screenrecord` for a full MP4.
+Demo flows use `takeScreenshot` at key screens. CI runs `adb screenrecord` for a full MP4.
 
 **Node.js annotations:** do not set `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` on E2E workflows — it forces Node 24 on actions that still declare Node 20 and produces deprecation noise. App tooling stays on Node 22 via `setup-node-pnpm-install`.
 
@@ -711,9 +711,6 @@ After dependency changes: commit `pnpm-lock.yaml`. CI uses `--frozen-lockfile`.
 | Area | This fork | Upstream PR? |
 |------|-----------|--------------|
 | Branding | `pnpm brand:generate` | Yes — docs + script |
-| Game prefs | MMKV panel in game + settings | App-specific |
-| Pure TS engine + replay | `src/lib/game/` | App-specific |
-| Silent leave (auto-save) | No exit alert | Pattern doc |
 | CI React Doctor + knip | Custom workflows | Partial |
 | Web host | **Vercel** when EAS web quota capped | Doc only |
 

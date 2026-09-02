@@ -2,10 +2,10 @@ import type { ConfirmOptions } from '@/lib/confirm';
 import { useCallback, useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 import { registerConfirmHandler } from '@/lib/confirm';
 import { interFont } from '@/lib/ui/fonts';
 import { continuousRadius } from '@/lib/ui/native-styles';
+import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 
 /**
  * In-app confirm so web (and native) never depend on `window.confirm` /

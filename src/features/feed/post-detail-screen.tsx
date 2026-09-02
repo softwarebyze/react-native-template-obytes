@@ -1,12 +1,13 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
-
 import {
   ActivityIndicator,
   FocusAwareStatusBar,
   Text,
   View,
 } from '@/components/ui';
+
+import { stackEscapeHeaderOptions } from '@/lib/navigation/stack-escape-header';
 import { usePost } from './api';
 
 export function PostDetailScreen() {
@@ -19,7 +20,7 @@ export function PostDetailScreen() {
   if (isPending) {
     return (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
+        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed', ...stackEscapeHeaderOptions() }} />
         <FocusAwareStatusBar />
         <ActivityIndicator />
       </View>
@@ -28,7 +29,7 @@ export function PostDetailScreen() {
   if (isError) {
     return (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
+        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed', ...stackEscapeHeaderOptions() }} />
         <FocusAwareStatusBar />
         <Text className="text-center">Error loading post</Text>
       </View>
@@ -37,7 +38,7 @@ export function PostDetailScreen() {
 
   return (
     <View className="flex-1 p-3">
-      <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
+      <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed', ...stackEscapeHeaderOptions() }} />
       <FocusAwareStatusBar />
       <Text className="text-xl">{data.title}</Text>
       <Text>

@@ -2,9 +2,9 @@
 
 ## Contact email
 
-Store listings, privacy policy, and in-app Support use **YOUR_EXPO_ACCOUNT@gmail.com** (personal account).
+Store listings, privacy policy, and in-app Support use **YOUR_EXPO_ACCOUNT@gmail.com** (replace with your account).
 
-Before any metadata push, confirm `store.config.json` → `apple.review.phone` is correct (currently **+1 954 593 1670**).
+Before any metadata push, confirm `store.config.json` → `apple.review.phone` is correct (currently **YOUR_REVIEW_PHONE**).
 
 **App Store listing sync (EAS Metadata):** see **[eas-metadata.md](./eas-metadata.md)** — edit `store.config.json`, then `pnpm metadata:push` / `pnpm metadata:push:production`.
 
@@ -52,4 +52,4 @@ EXPO_PUBLIC_APP_ENV=production eas submit --platform ios --profile production --
 
 ## Apple team
 
-EAS builds use team **Zachary Ebenfeld (Individual)** — `75M38Z9JBF` (set in `eas.json`).
+EAS builds use your Apple team — set `YOUR_APPLE_TEAM_ID` in `eas.json` after `eas init`.

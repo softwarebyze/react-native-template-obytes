@@ -3,12 +3,12 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui';
-import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 import { hapticSelection } from '@/lib/haptics';
 import {
   SETTINGS_ROW_MIN_HEIGHT,
   SETTINGS_ROW_PADDING_H,
 } from '@/lib/ui/settings-layout';
+import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 
 export type PickerOption<T extends string> = {
   value: T;

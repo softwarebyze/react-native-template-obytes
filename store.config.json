@@ -4,11 +4,7 @@
     "version": "9.0.0",
     "copyright": "2026 Your Name",
     "categories": [
-      [
-        "UTILITIES",
-        "PRODUCTIVITY",
-        "PRODUCTIVITY"
-      ],
+      "UTILITIES",
       "PRODUCTIVITY"
     ],
     "advisory": {

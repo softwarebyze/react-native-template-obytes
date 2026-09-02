@@ -8,11 +8,16 @@
     "src/lib/storage.tsx",
     "env.ts"
   ],
-  "project": ["src/**/*.{ts,tsx}"],
+  "project": [
+    "src/**/*.{ts,tsx}"
+  ],
   "ignore": [
     "src/components/ui/form-utils.ts",
     "src/components/ui/modal-keyboard-aware-scroll-view.tsx",
-    "src/lib/utils.ts"
+    "src/lib/utils.ts",
+    "src/lib/web-share-meta.ts",
+    "src/lib/haptics.ts",
+    "src/lib/app-links.ts"
   ],
   "ignoreBinaries": [
     "adb",
@@ -33,6 +38,13 @@
     "@types/invariant",
     "dotenv",
     "eslint-plugin-unicorn",
-    "zustand"
+    "zustand",
+    "sharp",
+    "expo-updates",
+    "expo-haptics",
+    "posthog-react-native",
+    "agent-device",
+    "expo-application",
+    "expo-device"
   ]
 }

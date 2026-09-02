@@ -1,5 +1,6 @@
 import { Link, Redirect, Tabs } from 'expo-router';
 import * as React from 'react';
+import { StackEscapeButton } from '@/components/navigation/stack-escape-button';
 
 import { Pressable, Text } from '@/components/ui';
 import {
@@ -54,8 +55,9 @@ export default function TabLayout() {
         name="language"
         options={{
           href: null,
-          title: "Language",
+          title: 'Language',
           headerShown: true,
+          headerLeft: () => <StackEscapeButton />,
         }}
       />
     </Tabs>

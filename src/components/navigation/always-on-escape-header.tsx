@@ -1,5 +1,5 @@
-import type { NativeStackHeaderProps } from 'expo-router';
-import { getHeaderTitle, Header } from 'expo-router/react-navigation';
+import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { getHeaderTitle, Header } from '@react-navigation/elements';
 
 import { StackEscapeButton } from '@/components/navigation/stack-escape-button';
 

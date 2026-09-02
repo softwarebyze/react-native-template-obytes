@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "rawDir": "app-store-screenshots/raw",
+  "outDir": "app-store-screenshots",
+  "layout": "bleed-overlay",
+  "overlayPct": 0.28,
+  "colors": {
+    "background": "#1E0C02",
+    "headline": "#E8A04A",
+    "sub": "#F3E6C8"
+  },
+  "font": {
+    "family": "Fraunces",
+    "file": "fraunces-700.woff2",
+    "woff2Url": "https://fonts.gstatic.com/s/fraunces/v38/6NUh8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58njr1a03gg7S2nfgRYIcUByTCf7T.woff2",
+    "fallback": "Georgia, \"Times New Roman\", serif"
+  },
+  "devices": {
+    "iphone": { "width": 1320, "height": 2868 },
+    "ipad": { "width": 2064, "height": 2752 }
+  },
+  "frames": [
+    {
+      "device": "iphone",
+      "source": "iphone-69-01-hero.png",
+      "dest": "iphone-69-01-hero.png",
+      "headline": "Your product in frame",
+      "cropTop": 0.14
+    },
+    {
+      "device": "iphone",
+      "source": "iphone-69-02-auth.png",
+      "dest": "iphone-69-02-auth.png",
+      "headline": "Sign in that works",
+      "cropTop": 0.12
+    },
+    {
+      "device": "iphone",
+      "source": "iphone-69-03-feed.png",
+      "dest": "iphone-69-03-feed.png",
+      "headline": "A working feed",
+      "cropTop": 0.12
+    },
+    {
+      "device": "iphone",
+      "source": "iphone-69-04-onboarding.png",
+      "dest": "iphone-69-04-onboarding.png",
+      "headline": "Guided first launch",
+      "cropTop": 0.12
+    },
+    {
+      "device": "iphone",
+      "source": "iphone-69-05-settings.png",
+      "dest": "iphone-69-05-settings.png",
+      "cropTop": 0
+    },
+    {
+      "device": "ipad",
+      "source": "ipad-13-01-hero.png",
+      "dest": "ipad-13-01-hero.png",
+      "headline": "Your product in frame",
+      "cropTop": 0.14
+    },
+    {
+      "device": "ipad",
+      "source": "ipad-13-02-auth.png",
+      "dest": "ipad-13-02-auth.png",
+      "headline": "Sign in that works",
+      "cropTop": 0.12
+    },
+    {
+      "device": "ipad",
+      "source": "ipad-13-03-feed.png",
+      "dest": "ipad-13-03-feed.png",
+      "headline": "A working feed",
+      "cropTop": 0.12
+    },
+    {
+      "device": "ipad",
+      "source": "ipad-13-04-onboarding.png",
+      "dest": "ipad-13-04-onboarding.png",
+      "headline": "Guided first launch",
+      "cropTop": 0.12
+    },
+    {
+      "device": "ipad",
+      "source": "ipad-13-05-settings.png",
+      "dest": "ipad-13-05-settings.png",
+      "cropTop": 0
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+# Files copied from softwarebyze/react-native-template-obytes into apps
+# generated from this fork. The sync-from-template workflow copies ONLY these
+# globs. App identity, product UI, listing copy, and EAS ids stay app-owned.
+#
+# NEVER mark entire package.json as owned. Expo versions live in .template-pins.json.
+
+owned:
+  - .template-owned.yml
+  - .template-pins.json
+  - .github/workflows/sync-from-template.yml
+  - .github/workflows/lint-ts.yml
+  - .github/workflows/type-check.yml
+  - .github/workflows/test.yml
+  - .github/workflows/expo-doctor.yml
+  - .github/workflows/knip.yml
+  - .github/workflows/react-doctor.yml
+  - .github/workflows/preview.yml
+  - .github/workflows/dev-client.yml
+  - .github/workflows/e2e-android.yml
+  - .github/workflows/e2e-android-maestro.yml
+  - .github/workflows/e2e-android-eas-build.yml
+  - .github/workflows/eas-build-preview.yml
+  - .github/workflows/eas-build-prod.yml
+  - .github/workflows/eas-metadata-push.yml
+  - .github/workflows/eas-submit-preview-ios.yml
+  - .github/workflows/compress-images.yml
+  - .github/workflows/stale.yml
+  - .github/workflows/new-app-version.yml
+  - .github/workflows/new-github-release.yml
+  - .github/actions/**
+  - .github/scripts/**
+  - scripts/sync-from-template.mjs
+  - scripts/compose-store-screenshots.mjs
+  - scripts/compose-store-screenshots.test.ts
+  - scripts/generate-brand-assets.ts
+  - scripts/make-preview-store-config.mjs
+  - scripts/make-preview-store-config.test.ts
+  - scripts/asc-api-key-from-eas.mjs
+  - eslint.config.mjs
+  - .prettierignore
+  - knip.json
+  - tsconfig.json
+  - .vscode/settings.json
+  - docs/obytes-template-playbook.md
+  - docs/template-sync.md
+  - docs/store-screenshots.md
+  - docs/eas-metadata.md
+  - Gemfile
+  - Gemfile.lock
+  - fastlane/Fastfile
+  - fastlane/Appfile
+  - public/index.html
+  - vercel.json
+  - src/lib/confirm.ts
+  - src/lib/confirm.test.ts
+  - src/components/ui/confirm-dialog.tsx
+  - src/components/ui/confirm-dialog.test.tsx
+  - src/lib/navigation/**
+  - src/components/navigation/**
+  - src/lib/analytics/**
+  - src/lib/web-share-meta.ts
+  - src/lib/web-share-meta.test.ts
+  - src/components/posthog-error-fallback.tsx
+  - src/components/posthog-error-fallback.test.tsx
+  - src/config/posthog.ts
+  - src/lib/ui/template-palette.ts
+
+app_owned:
+  - src/app/**
+  - src/features/**
+  - src/translations/**
+  - assets/**
+  - env.ts
+  - .env
+  - .env.example
+  - app.config.ts
+  - app.json
+  - store.config.json
+  - package.json
+  - docs/marketing/**
+  - .github/workflows/sync-upstream.yml

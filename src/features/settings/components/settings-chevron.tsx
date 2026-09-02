@@ -1,8 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import * as React from 'react';
 
-import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 import { isRTL } from '@/lib/i18n';
+import { TEMPLATE_PALETTE } from '@/lib/ui/template-palette';
 
 export function SettingsChevron() {
   return (

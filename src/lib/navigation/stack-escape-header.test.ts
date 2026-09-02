@@ -1,9 +1,9 @@
 import { stackEscapeHeaderOptionsFor } from './stack-escape-header';
 
-jest.mock('expo-router/react-navigation', () => ({
+jest.mock('@react-navigation/elements', () => ({
   Header: () => null,
   getHeaderTitle: () => 'Settings',
-}));
+}), { virtual: true });
 
 jest.mock('@/components/navigation/stack-escape-button', () => ({
   StackEscapeButton: () => null,

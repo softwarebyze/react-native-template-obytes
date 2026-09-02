@@ -4,14 +4,15 @@ import { Stack } from 'expo-router';
 import * as React from 'react';
 import { showMessage } from 'react-native-flash-message';
 import * as z from 'zod';
-
 import {
   Button,
   Input,
   showErrorMessage,
   View,
 } from '@/components/ui';
+
 import { getFieldError } from '@/components/ui/form-utils';
+import { stackEscapeHeaderOptions } from '@/lib/navigation/stack-escape-header';
 import { useAddPost } from './api';
 
 const schema = z.object({
@@ -58,6 +59,7 @@ export function AddPostScreen() {
         options={{
           title: 'Add Post',
           headerBackTitle: 'Feed',
+          ...stackEscapeHeaderOptions(),
         }}
       />
       <View className="flex-1 p-4">

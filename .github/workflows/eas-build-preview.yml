@@ -57,7 +57,7 @@ jobs:
           IOS: true
 
   Metadata:
-    name: Push App Store metadata
+    name: Metadata is a later step
     needs: Build
     runs-on: ubuntu-latest
     steps:
@@ -80,4 +80,4 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📝 Push metadata
-        run: pnpm metadata:push
+        run: echo "EAS Build uses --no-wait; run metadata:push later"

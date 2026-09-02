@@ -2,13 +2,13 @@ import type { ConfigContext, ExpoConfig } from '@expo/config';
 
 import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 
-import 'tsx/cjs';
+import { readFileSync } from 'node:fs';
 
 // adding lint exception as we need to import tsx/cjs before env.ts is imported
-// eslint-disable-next-line perfectionist/sort-imports
-import Env from './env';
-import { readFileSync } from 'node:fs';
+
 import { join } from 'node:path';
+import Env from './env';
+import 'tsx/cjs';
 
 const brand = JSON.parse(
   readFileSync(join(__dirname, 'assets/brand/brand.config.json'), 'utf8'),
@@ -134,7 +134,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ],
   extra: {
     posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
-    posthogHost: process.env.POSTHOG_HOST || "https://us.i.posthog.com",
+    posthogHost: process.env.POSTHOG_HOST || 'https://us.i.posthog.com',
     appEnv: Env.EXPO_PUBLIC_APP_ENV,
     eas: {
       projectId: EAS_PROJECT_ID,

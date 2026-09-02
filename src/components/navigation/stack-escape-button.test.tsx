@@ -12,7 +12,7 @@ jest.mock('expo-router', () => ({
   },
 }));
 
-jest.mock('expo-router/react-navigation', () => {
+jest.mock('@react-navigation/elements', () => {
   const React = require('react');
   const { Pressable: RNPressable } = require('react-native');
   function HeaderButtonMock({

@@ -4,6 +4,7 @@ export const TEMPLATE_PALETTE = {
   surface: '#1E293B',
   surfaceBorder: '#334155',
   accent: '#38BDF8',
+  accentDim: '#7DD3FC',
   text: '#F8FAFC',
   textMuted: '#94A3B8',
   control: '#334155',

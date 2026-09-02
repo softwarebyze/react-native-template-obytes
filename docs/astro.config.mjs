@@ -9,9 +9,9 @@ export default defineConfig({
   site: 'https://starter.obytes.com/',
   integrations: [
     starlight({
-      title: 'Obytes Starter | React Native Template',
+      title: 'softwarebyze Obytes fork',
       plugins: [starlightLlmsTxt()],
-      description: `Your All-in-One Solution for Building Outstanding React Native/Expo Apps. From editor setup to store submission, we've got you covered!`,
+      description: `Obytes Expo starter forked by softwarebyze. Store rails, self-PR sync, screenshot compose.`,
       expressiveCode: {
         themes: ['dracula', 'solarized-light'],
       },
@@ -24,7 +24,7 @@ export default defineConfig({
         LastUpdated: './src/components/LastUpdated.astro',
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/obytes/react-native-template-obytes' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/softwarebyze/react-native-template-obytes' },
       ],
       head: [
         {
