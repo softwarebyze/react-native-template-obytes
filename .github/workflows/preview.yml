@@ -1,4 +1,5 @@
-# Publishes an EAS Update on every PR; Expo's action posts the QR comment.
+# Generated apps publish an EAS Update on every PR; Expo's action posts the QR comment.
+# The template repo itself does not run this (no Expo project to update).
 # First-time reviewers: install the development build once (dev-client.yml).
 # Docs: https://docs.expo.dev/eas-update/github-actions/
 
@@ -11,6 +12,7 @@ on:
 jobs:
   update:
     name: EAS Update Preview
+    if: github.repository != 'softwarebyze/react-native-template-obytes'
     runs-on: ubuntu-latest
     permissions:
       contents: read
