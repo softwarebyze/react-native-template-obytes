@@ -1,5 +1,12 @@
 import type { ErrorBoundaryProps } from 'expo-router';
 import type { ViewProps } from 'react-native';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from '@expo-google-fonts/inter';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import { ThemeProvider } from '@react-navigation/native';
@@ -42,6 +49,12 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
+  useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
   const hasHiddenSplash = React.useRef(false);
   const pathname = usePathname();
   const params = useGlobalSearchParams();

@@ -13,7 +13,7 @@ const projectKey = extra?.posthogProjectToken;
 const host = extra?.posthogHost || 'https://us.i.posthog.com';
 
 /** Placeholder analytics wiring. Set POSTHOG_PROJECT_TOKEN in EAS env (not EXPO_PUBLIC_*). */
-export const posthogConfig = {
+const posthogConfig = {
   projectToken: projectKey || '',
   host,
   enabled: isPostHogProjectToken(projectKey),

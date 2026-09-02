@@ -1,8 +1,9 @@
 import { Link, Redirect, Tabs } from 'expo-router';
 import * as React from 'react';
-import { StackEscapeButton } from '@/components/navigation/stack-escape-button';
 
-import { Pressable, Text } from '@/components/ui';
+import { SettingsHeaderButton } from '@/components/navigation/settings-header-button';
+import { StackEscapeButton } from '@/components/navigation/stack-escape-button';
+import { Pressable, Text, View } from '@/components/ui';
 import {
   Feed as FeedIcon,
   Settings as SettingsIcon,
@@ -10,10 +11,17 @@ import {
 } from '@/components/ui/icons';
 import { useAuthStore as useAuth } from '@/features/auth/use-auth-store';
 import { useIsFirstTime } from '@/lib/hooks/use-is-first-time';
+import { translate } from '@/lib/i18n';
+import {
+  pickerFormSheetOptions,
+  settingsStackOptions,
+} from '@/lib/navigation/native-stack-options';
 
 export default function TabLayout() {
   const status = useAuth.use.status();
   const [isFirstTime] = useIsFirstTime();
+  const settingsHeader = settingsStackOptions();
+  const languageHeader = pickerFormSheetOptions(translate('settings.language'));
 
   if (isFirstTime) {
     return <Redirect href="/onboarding" />;
@@ -28,7 +36,7 @@ export default function TabLayout() {
         options={{
           title: 'Feed',
           tabBarIcon: ({ color }) => <FeedIcon color={color} />,
-          headerRight: () => <CreateNewPostLink />,
+          headerRight: () => <FeedHeaderRight />,
           tabBarButtonTestID: 'feed-tab',
         }}
       />
@@ -45,8 +53,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
-          headerShown: false,
+          title: settingsHeader.title,
+          headerShown: settingsHeader.headerShown,
+          headerStyle: settingsHeader.headerStyle,
+          headerTintColor: settingsHeader.headerTintColor,
+          headerShadowVisible: settingsHeader.headerShadowVisible,
           tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
           tabBarButtonTestID: 'settings-tab',
         }}
@@ -55,12 +66,24 @@ export default function TabLayout() {
         name="language"
         options={{
           href: null,
-          title: 'Language',
-          headerShown: true,
+          title: languageHeader.title,
+          headerShown: languageHeader.headerShown,
+          headerStyle: languageHeader.headerStyle,
+          headerTintColor: languageHeader.headerTintColor,
+          headerTitleStyle: languageHeader.headerTitleStyle,
           headerLeft: () => <StackEscapeButton />,
         }}
       />
     </Tabs>
+  );
+}
+
+function FeedHeaderRight() {
+  return (
+    <View className="flex-row items-center gap-3 pr-1">
+      <CreateNewPostLink />
+      <SettingsHeaderButton />
+    </View>
   );
 }
 

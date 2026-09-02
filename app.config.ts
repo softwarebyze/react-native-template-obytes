@@ -3,12 +3,13 @@ import type { ConfigContext, ExpoConfig } from '@expo/config';
 import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 
 import { readFileSync } from 'node:fs';
-
-// adding lint exception as we need to import tsx/cjs before env.ts is imported
-
 import { join } from 'node:path';
-import Env from './env';
+
 import 'tsx/cjs';
+
+// tsx/cjs must load before env.ts so Expo can require the TypeScript module
+// eslint-disable-next-line perfectionist/sort-imports
+import Env from './env';
 
 const brand = JSON.parse(
   readFileSync(join(__dirname, 'assets/brand/brand.config.json'), 'utf8'),

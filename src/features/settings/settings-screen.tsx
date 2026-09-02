@@ -1,6 +1,6 @@
 import Env from 'env';
 import { useCallback } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { useUniwind } from 'uniwind';
 
 import {
@@ -19,6 +19,7 @@ import {
   shareApp,
 } from '@/lib/app-links';
 import { translate } from '@/lib/i18n';
+import { WEB_HEADER_INSET, WEB_SETTINGS_TOP_PADDING } from '@/lib/ui/web-layout';
 import { LanguageItem } from './components/language-item';
 import { SettingsContainer } from './components/settings-container';
 import { SettingsItem } from './components/settings-item';
@@ -43,7 +44,14 @@ export function SettingsScreen() {
     <>
       <FocusAwareStatusBar />
 
-      <ScrollView>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={
+          Platform.OS === 'web'
+            ? { paddingTop: WEB_HEADER_INSET + WEB_SETTINGS_TOP_PADDING }
+            : undefined
+        }
+      >
         <View className="flex-1 px-4 pt-16">
           <Text className="text-xl font-bold">
             {translate('settings.title')}

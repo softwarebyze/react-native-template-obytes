@@ -14,10 +14,7 @@
   "ignore": [
     "src/components/ui/form-utils.ts",
     "src/components/ui/modal-keyboard-aware-scroll-view.tsx",
-    "src/lib/utils.ts",
-    "src/lib/web-share-meta.ts",
-    "src/lib/haptics.ts",
-    "src/lib/app-links.ts"
+    "src/lib/utils.ts"
   ],
   "ignoreBinaries": [
     "adb",
@@ -39,12 +36,19 @@
     "dotenv",
     "eslint-plugin-unicorn",
     "zustand",
-    "sharp",
+    "@expo/vector-icons",
+    "@tanstack/zod-form-adapter",
+    "expo-status-bar",
+    "@react-navigation/native-stack",
+    "@react-navigation/elements",
     "expo-updates",
-    "expo-haptics",
-    "posthog-react-native",
-    "agent-device",
-    "expo-application",
-    "expo-device"
-  ]
+    "sharp",
+    "agent-device"
+  ],
+  "ignoreIssues": {
+    "src/features/auth/use-auth-store.tsx": ["exports"],
+    "src/lib/api/provider.tsx": ["exports"],
+    "src/lib/api/utils.tsx": ["exports", "types"],
+    "src/features/auth/components/login-form.tsx": ["types"]
+  }
 }

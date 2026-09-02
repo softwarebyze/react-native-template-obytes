@@ -2,11 +2,11 @@ import { defineConfig, passthroughImageService } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLlmsTxt from 'starlight-llms-txt';
 
-const site = 'https://starter.obytes.com/';
+const site = 'https://softwarebyze.github.io/react-native-template-obytes/';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://starter.obytes.com/',
+  site: 'https://softwarebyze.github.io/react-native-template-obytes/',
   integrations: [
     starlight({
       title: 'softwarebyze Obytes fork',
@@ -53,20 +53,6 @@ export default defineConfig({
             rel: 'stylesheet',
             href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap',
           },
-        },
-        {
-          tag: 'script',
-          attrs: {
-            src: 'https://cdn.jsdelivr.net/npm/@minimal-analytics/ga4/dist/index.js',
-            async: true,
-          },
-        },
-        {
-          tag: 'script',
-          content: ` window.minimalAnalytics = {
-            trackingId: 'G-GQ45JJD1JC',
-            autoTrack: true,
-          };`,
         },
       ],
       sidebar: [
