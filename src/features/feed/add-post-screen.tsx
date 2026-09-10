@@ -16,8 +16,8 @@ import { stackEscapeHeaderOptions } from '@/lib/navigation/stack-escape-header';
 import { useAddPost } from './api';
 
 const schema = z.object({
-  title: z.string().min(10),
-  body: z.string().min(120),
+  title: z.string().min(10, 'String must contain at least 10 character(s)'),
+  body: z.string().min(120, 'String must contain at least 120 character(s)'),
 });
 
 export function AddPostScreen() {
@@ -31,6 +31,7 @@ export function AddPostScreen() {
 
     validators: {
       onChange: schema as any,
+      onSubmit: schema as any,
     },
     onSubmit: ({ value }) => {
       console.log(value);

@@ -10,7 +10,7 @@
   },
   "agent": {
     "tool_permissions": {
-      "default": "allow"
+      "default": "confirm"
     }
   }
 }

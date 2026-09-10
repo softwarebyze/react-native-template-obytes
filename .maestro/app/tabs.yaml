@@ -15,5 +15,9 @@ env:
 - tapOn:
     id: settings-tab
 - assertVisible: Settings
-- scroll
+- scrollUntilVisible:
+    element: Logout
+    direction: DOWN
+    timeout: 20000
+    visibilityPercentage: 50
 - assertVisible: Logout

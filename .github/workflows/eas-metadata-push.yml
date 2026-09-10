@@ -45,5 +45,6 @@ jobs:
           if [ "${{ inputs.profile }}" = "production" ]; then
             pnpm metadata:push:production
           else
+            pnpm metadata:preview-config
             pnpm metadata:push
           fi

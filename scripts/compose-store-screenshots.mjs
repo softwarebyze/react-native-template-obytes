@@ -107,35 +107,71 @@ function fontPath(file) {
   return path.join(fontDir(), file);
 }
 
+const FONT_DOWNLOAD_TIMEOUT_MS = 15_000;
+const FONT_DOWNLOAD_MAX_REDIRECTS = 5;
+const FONT_DOWNLOAD_MAX_BYTES = 2 * 1024 * 1024;
+
 function downloadFile(url, dest) {
   return new Promise((resolve, reject) => {
-    const request = (href) => {
-      https.get(href, { headers: { 'User-Agent': 'obytes-fork-compose/1.0' } }, (res) => {
+    let settled = false;
+    const fail = (error) => {
+      if (settled) return;
+      settled = true;
+      reject(error);
+    };
+    const request = (href, redirectsLeft) => {
+      const req = https.get(href, { headers: { "User-Agent": "obytes-fork-compose/1.0" } }, (res) => {
+        res.on("error", fail);
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           res.resume();
-          request(res.headers.location);
+          if (redirectsLeft === 0) {
+            fail(new Error("Font download exceeded redirect limit"));
+            return;
+          }
+          const nextUrl = new URL(res.headers.location, href);
+          if (nextUrl.protocol !== "https:") {
+            fail(new Error("Font download refused non-HTTPS redirect"));
+            return;
+          }
+          request(nextUrl, redirectsLeft - 1);
           return;
         }
         if (res.statusCode !== 200) {
           res.resume();
-          reject(new Error(`Font download failed: HTTP ${res.statusCode}`));
+          fail(new Error(`Font download failed: HTTP ${res.statusCode}`));
           return;
         }
         const chunks = [];
-        res.on('data', (c) => chunks.push(c));
-        res.on('end', () => {
+        let size = 0;
+        res.on("data", (chunk) => {
+          size += chunk.length;
+          if (size > FONT_DOWNLOAD_MAX_BYTES) {
+            res.destroy();
+            fail(new Error(`Font download exceeded ${FONT_DOWNLOAD_MAX_BYTES} bytes`));
+            return;
+          }
+          chunks.push(chunk);
+        });
+        res.on("end", () => {
+          if (settled) return;
           const buf = Buffer.concat(chunks);
-          if (buf.length < 4 || buf.subarray(0, 4).toString() !== 'wOF2') {
-            reject(new Error('Font download was not a woff2'));
+          if (buf.length < 4 || buf.subarray(0, 4).toString() !== "wOF2") {
+            fail(new Error("Font download was not a woff2"));
             return;
           }
           fs.mkdirSync(path.dirname(dest), { recursive: true });
           fs.writeFileSync(dest, buf);
+          settled = true;
           resolve(dest);
         });
-      }).on('error', reject);
+      });
+      req.setTimeout(FONT_DOWNLOAD_TIMEOUT_MS, () => {
+        req.destroy();
+        fail(new Error(`Font download timed out after ${FONT_DOWNLOAD_TIMEOUT_MS}ms`));
+      });
+      req.on("error", fail);
     };
-    request(url);
+    request(new URL(url), FONT_DOWNLOAD_MAX_REDIRECTS);
   });
 }
 
