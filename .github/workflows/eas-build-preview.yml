@@ -7,6 +7,7 @@
 # It will run on every GitHub release published on the repo or can be triggered manually from the actions tab.
 # Preview iOS builds use --auto-submit → TestFlight (see eas.json submit.preview).
 # eas-build generates store.preview.config.json before --auto-submit so metadataPath exists.
+# Listing metadata is not pushed here (EAS --no-wait). Use eas-metadata-push.yml after ASC has an editable version.
 
 # 🚨 GITHUB SECRETS REQUIRED:
 #         - EXPO_TOKEN: Expo token to authenticate with EAS
@@ -55,29 +56,3 @@ jobs:
           VERSION: ${{ steps.version.outputs.label }}
           AUTO_SUBMIT: 'true'
           IOS: true
-
-  Metadata:
-    name: Metadata is a later step
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for EXPO_TOKEN
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            exit 1
-          fi
-
-      - name: 📦 Checkout project repo
-        uses: actions/checkout@v4
-
-      - name: 📦 Setup Node + PNPM + install deps
-        uses: ./.github/actions/setup-node-pnpm-install
-
-      - name: 📦 Setup Expo and EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: 📝 Push metadata
-        run: echo "EAS Build uses --no-wait; run metadata:push later"

@@ -17,9 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
-  checks: write
-  pull-requests: write
+  contents: read
 
 jobs:
   changes:
@@ -137,13 +135,6 @@ jobs:
           ram-size: 4096M
           script: bash .github/scripts/run-maestro-e2e-emulator.sh "${{ github.workspace }}" com.obytes.preview
 
-      - name: Publish visual Maestro report
-        if: always()
-        uses: ./.github/actions/maestro-e2e-report
-        with:
-          maestro-output-dir: ${{ github.workspace }}/.maestro-ci-output
-          junit-report: ${{ github.workspace }}/report.xml
-
       - name: Upload Maestro logs (legacy path)
         if: always()
         uses: actions/upload-artifact@v4
@@ -152,6 +143,7 @@ jobs:
           path: |
             .maestro-ci-output/**
             ~/.maestro/tests/**/*
+            e2e-recording.mp4
           if-no-files-found: ignore
           retention-days: 14
 
@@ -163,3 +155,38 @@ jobs:
           path: report.xml
           if-no-files-found: ignore
           retention-days: 14
+
+  # Write token is only for screenshot git-push, JUnit checks, and the PR comment.
+  report-android:
+    name: Publish Maestro report
+    needs: test-android
+    if: always() && needs.test-android.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Maestro logs
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-test-logs
+          path: ${{ github.workspace }}
+
+      - name: Download JUnit report
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e_android_report
+          path: ${{ github.workspace }}
+
+      - name: Publish visual Maestro report
+        if: always()
+        uses: ./.github/actions/maestro-e2e-report
+        with:
+          maestro-output-dir: ${{ github.workspace }}/.maestro-ci-output
+          junit-report: ${{ github.workspace }}/report.xml

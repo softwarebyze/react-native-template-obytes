@@ -6,7 +6,7 @@ name: Sync from template
 
 on:
   schedule:
-    # Weekdays 9:00am Eastern (EDT). EST would be 14:00 UTC.
+    # Weekdays 13:00 UTC (9:00am EDT / 8:00am EST).
     - cron: '0 13 * * 1-5'
   workflow_dispatch:
 

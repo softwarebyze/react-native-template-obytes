@@ -100,7 +100,7 @@ Most release steps are **already wired as GitHub Actions** — they use `workflo
 | **New App Version** | Manual (patch/minor/major) | Bump version, tag, push → triggers release flow |
 | **New GitHub Release** | Auto on new tag | Draft release notes |
 | **E2E (Maestro)** | Auto on `src/**` changes + push to `main` | Smoke test + PR screenshots |
-| **EAS Update Preview** | Every PR | OTA preview QR (Expo comment) |
+| **EAS Update Preview** | Every PR | OTA preview QR only when EXPO_TOKEN is configured; otherwise the workflow skips successfully |
 | **EAS Metadata Push** | Manual | Push `store.config.json` (+ generated preview title) |
 | **Knip / Expo Doctor / React Doctor** | PR / path filters | Unused exports + dependency health |
 

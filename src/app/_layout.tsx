@@ -24,6 +24,7 @@ import { ConfirmDialogHost } from '@/components/ui/confirm-dialog';
 import { useThemeConfig } from '@/components/ui/use-theme-config';
 import { posthog } from '@/config/posthog';
 import { hydrateAuth } from '@/features/auth/use-auth-store';
+import { pickApprovedScreenParams } from '@/lib/analytics/screen-params';
 import { APIProvider } from '@/lib/api';
 import { loadSelectedTheme } from '@/lib/hooks/use-selected-theme';
 import '@/lib/ignore-known-logs';
@@ -64,7 +65,7 @@ export default function RootLayout() {
     if (previousPathname.current !== pathname) {
       posthog.screen(pathname, {
         previous_screen: previousPathname.current ?? null,
-        ...params,
+        ...pickApprovedScreenParams(params),
       });
       previousPathname.current = pathname;
     }

@@ -5,7 +5,7 @@ Replace placeholders after clone: EAS ids, bundle ids, listing copy.
 Or run the in-repo CLI from a checkout of this fork.
 
 ## What the watcher does
-Workflow: .github/workflows/sync-from-template.yml. Weekdays 9am Eastern plus workflow_dispatch.
+Workflow: .github/workflows/sync-from-template.yml. Weekdays at 13:00 UTC (9:00am EDT / 8:00am EST) plus workflow_dispatch.
 Runs only on generated apps, not on the template repo. Template uses sync-upstream.yml to PR Obytes master.
 Each run copies owned globs, skips app-owned paths (never whole package.json), applies pins, opens chore/sync-template. Never auto-merges.
 
