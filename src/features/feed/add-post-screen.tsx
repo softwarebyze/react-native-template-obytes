@@ -4,19 +4,20 @@ import { Stack } from 'expo-router';
 import * as React from 'react';
 import { showMessage } from 'react-native-flash-message';
 import * as z from 'zod';
-
 import {
   Button,
   Input,
   showErrorMessage,
   View,
 } from '@/components/ui';
+
 import { getFieldError } from '@/components/ui/form-utils';
+import { stackEscapeHeaderOptions } from '@/lib/navigation/stack-escape-header';
 import { useAddPost } from './api';
 
 const schema = z.object({
-  title: z.string().min(10),
-  body: z.string().min(120),
+  title: z.string().min(10, 'String must contain at least 10 character(s)'),
+  body: z.string().min(120, 'String must contain at least 120 character(s)'),
 });
 
 export function AddPostScreen() {
@@ -30,6 +31,7 @@ export function AddPostScreen() {
 
     validators: {
       onChange: schema as any,
+      onSubmit: schema as any,
     },
     onSubmit: ({ value }) => {
       console.log(value);
@@ -58,6 +60,7 @@ export function AddPostScreen() {
         options={{
           title: 'Add Post',
           headerBackTitle: 'Feed',
+          ...stackEscapeHeaderOptions(),
         }}
       />
       <View className="flex-1 p-4">

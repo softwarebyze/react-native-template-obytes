@@ -1,0 +1,75 @@
+# Runs in apps generated FROM this template. Auto-PRs template-owned files
+# onto THIS repo when softwarebyze/react-native-template-obytes updates.
+# Never auto-merges. Does not run on the template repo itself.
+
+name: Sync from template
+
+on:
+  schedule:
+    # Weekdays 13:00 UTC (9:00am EDT / 8:00am EST).
+    - cron: '0 13 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-from-template
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.repository != 'softwarebyze/react-native-template-obytes'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Shallow clone template
+        run: |
+          set -euo pipefail
+          git clone --depth=1 https://github.com/softwarebyze/react-native-template-obytes.git /tmp/obytes-template
+
+      - name: Open or update template sync PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          DEFAULT_BRANCH="${{ github.event.repository.default_branch }}"
+          git checkout -B chore/sync-template "origin/${DEFAULT_BRANCH}"
+
+          node "$GITHUB_WORKSPACE/scripts/sync-from-template.mjs" --from /tmp/obytes-template --to "$GITHUB_WORKSPACE"
+
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No template-owned changes"
+            exit 0
+          fi
+
+          git add -A
+          git commit -m "chore: sync template-owned files from softwarebyze/react-native-template-obytes"
+
+          if git ls-remote --exit-code origin refs/heads/chore/sync-template >/dev/null 2>&1; then
+            git push origin chore/sync-template --force-with-lease
+          else
+            git push -u origin chore/sync-template
+          fi
+
+          BODY=$(printf '%s\n' \
+            'Template-owned files copied from [softwarebyze/react-native-template-obytes](https://github.com/softwarebyze/react-native-template-obytes).' \
+            '' \
+            'App-owned paths (src/app, assets, env, listing copy, EAS ids, package.json name/scripts) were not overwritten.' \
+            '' \
+            'Opened by `.github/workflows/sync-from-template.yml`. Review and merge manually — this workflow never auto-merges.')
+
+          PR=$(gh pr list --head chore/sync-template --base "$DEFAULT_BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$PR" ]; then
+            gh pr edit "$PR" --title "chore: sync from obytes template" --body "$BODY"
+          else
+            gh pr create --base "$DEFAULT_BRANCH" --head chore/sync-template --title "chore: sync from obytes template" --body "$BODY"
+          fi

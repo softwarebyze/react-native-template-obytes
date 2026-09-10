@@ -1,14 +1,5 @@
-# 🔗 Links:
-# Source file: https://github.com/obytes/react-native-template-obytes/blob/master/.github/workflows/e2e-android.yml
-# End-to-end testing: https://starter.obytes.com/testing/end-to-end-testing/
-
-# ✍️ Description:
-# This workflow is used to run end-to-end tests on Android using Maestro Cloud.
-# As a first step, it will generate a test APK using the Gradle build and  then trigger  Maestro Cloud to run the tests on the generated APK.
-# This workflow will be triggered on pull requests (PRs) with the label "android-test-maestro-cloud" or can be manually triggered from the Actions tab.
-
-# 🚨 GITHUB SECRETS REQUIRED:
-# MAESTRO_CLOUD_API_KEY: API key for Maestro Cloud. You can get it from https://cloud.mobile.dev/ci-integration/github-actions#add-your-api-key-secret
+# Maestro Cloud E2E — labeled PRs or manual dispatch.
+# Label: android-test-maestro-cloud | Secret: MAESTRO_CLOUD_API_KEY
 
 name: E2E Tests Android (Maestro Cloud)
 
@@ -16,37 +7,107 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [main, master]
+    types: [opened, synchronize, reopened, labeled]
+
+concurrency:
+  group: e2e-maestro-cloud-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  generate-and-test-apk:
-    if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'android-test-maestro-cloud'))
-    name: Generate and Test Test APK (Maestro Cloud)
+  maestro-cloud-configured:
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'android-test-maestro-cloud')
     runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
+    steps:
+      - id: check
+        run: |
+          if [ -n "${{ secrets.MAESTRO_CLOUD_API_KEY }}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::MAESTRO_CLOUD_API_KEY is not set — skipping Maestro Cloud (use the GitHub emulator workflow instead)."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  generate-and-test-apk:
+    needs: maestro-cloud-configured
+    if: needs.maestro-cloud-configured.outputs.enabled == 'true'
+    name: Maestro Cloud E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
-      - name: 📦 Checkout project repo
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 📦 Setup Node + PNPM + install deps
+      - name: Setup Node + PNPM + install deps
         uses: ./.github/actions/setup-node-pnpm-install
 
-      - name: 📦 Set Up JDK + Generate Test APK
+      - name: Set Up JDK + Generate Test APK
         uses: ./.github/actions/setup-jdk-generate-apk
         with:
-          APP_ENV: staging
+          APP_ENV: preview
 
       - name: Upload Test APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-apk
-          path: ./android/app/build/outputs/apk/release/app-release.apk
+          path: ./android-test.apk
 
-      - name: 📱 Run E2E Tests with Maestro Cloud
+      - name: Run Maestro E2E on Maestro Cloud (try 1)
+        id: maestro_try1
+        uses: mobile-dev-inc/action-maestro-cloud@v1.4.1
+        continue-on-error: true
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: ./android-test.apk
+          workspace: .maestro
+          env: |
+            APP_ID=com.obytes.preview
+
+      - name: Wait before Maestro retry
+        if: steps.maestro_try1.outcome == 'failure'
+        run: sleep 90
+
+      - name: Run Maestro E2E on Maestro Cloud (try 2)
+        id: maestro_try2
+        if: steps.maestro_try1.outcome == 'failure'
+        uses: mobile-dev-inc/action-maestro-cloud@v1.4.1
+        continue-on-error: true
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: ./android-test.apk
+          workspace: .maestro
+          env: |
+            APP_ID=com.obytes.preview
+
+      - name: Wait before final Maestro retry
+        if: steps.maestro_try1.outcome == 'failure' && steps.maestro_try2.outcome == 'failure'
+        run: sleep 90
+
+      - name: Run Maestro E2E on Maestro Cloud (try 3)
+        id: maestro_try3
+        if: steps.maestro_try1.outcome == 'failure' && steps.maestro_try2.outcome == 'failure'
         uses: mobile-dev-inc/action-maestro-cloud@v1.4.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-          app-file: ./android/app/build/outputs/apk/release/app-release.apk
+          app-file: ./android-test.apk
+          workspace: .maestro
           env: |
-            APP_ID=com.obytes.staging
+            APP_ID=com.obytes.preview
+
+      - name: Require Maestro Cloud success
+        if: |
+          steps.maestro_try1.outcome == 'failure' &&
+          (steps.maestro_try2.outcome == 'failure' || steps.maestro_try2.outcome == 'skipped') &&
+          steps.maestro_try3.outcome == 'failure'
+        run: exit 1
+
+      - name: Maestro Cloud console
+        if: always()
+        run: |
+          echo "Try 1 → ${{ steps.maestro_try1.outputs.MAESTRO_CLOUD_CONSOLE_URL }}"
+          echo "Try 2 → ${{ steps.maestro_try2.outputs.MAESTRO_CLOUD_CONSOLE_URL }}"
+          echo "Try 3 → ${{ steps.maestro_try3.outputs.MAESTRO_CLOUD_CONSOLE_URL }}"

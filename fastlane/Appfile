@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+app_identifier(ENV.fetch("ASC_BUNDLE_ID", "com.obytes"))
+apple_id(ENV["APPLE_ID"]) if ENV["APPLE_ID"]
+team_id(ENV["APPLE_TEAM_ID"]) if ENV["APPLE_TEAM_ID"]
+itc_team_id(ENV["ITC_TEAM_ID"]) if ENV["ITC_TEAM_ID"]

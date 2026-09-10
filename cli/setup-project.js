@@ -54,9 +54,14 @@ const updateProjectConfig = async (projectName) => {
   const contents = fs.readFileSync(configPath, {
     encoding: 'utf-8',
   });
+  // Lowercase schemes FIRST so create-obytes-app cannot reintroduce PascalCase
+  // (EAS Update requires scheme to match /^[a-z][a-z0-9+.-]*$/).
+  const scheme = projectName.toLowerCase();
   const replaced = contents
+    .replace(/obytesapp\.preview/g, `${scheme}.preview`)
+    .replace(/obytesapp/g, scheme)
     .replace(/ObytesApp/gi, projectName)
-    .replace(/com.obytes/gi, `com.${projectName.toLowerCase()}`)
+    .replace(/com.obytes/gi, `com.${scheme}`)
     .replace(/obytes/gi, 'expo-owner');
 
   fs.writeFileSync(configPath, replaced, { spaces: 2 });

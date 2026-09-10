@@ -1,0 +1,60 @@
+{
+  "configVersion": 0,
+  "apple": {
+    "version": "9.0.0",
+    "copyright": "2026 Your Name",
+    "categories": [
+      "UTILITIES",
+      "PRODUCTIVITY"
+    ],
+    "advisory": {
+      "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+      "contests": "NONE",
+      "gambling": false,
+      "gamblingSimulated": "NONE",
+      "horrorOrFearThemes": "NONE",
+      "matureOrSuggestiveThemes": "NONE",
+      "medicalOrTreatmentInformation": "NONE",
+      "profanityOrCrudeHumor": "NONE",
+      "sexualContentGraphicAndNudity": "NONE",
+      "sexualContentOrNudity": "NONE",
+      "unrestrictedWebAccess": false,
+      "violenceCartoonOrFantasy": "NONE",
+      "violenceRealistic": "NONE",
+      "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+      "kidsAgeBand": null,
+      "ageRatingOverride": "NONE",
+      "koreaAgeRatingOverride": "NONE"
+    },
+    "info": {
+      "en-US": {
+        "title": "ObytesApp",
+        "subtitle": "Obytes starter app",
+        "promoText": "Replace this listing copy before your first App Store submission.",
+        "description": "ObytesApp is placeholder App Store listing copy for apps scaffolded from this template. Replace title, description, keywords, URLs, and review contact before eas metadata:push.",
+        "keywords": [
+          "expo",
+          "react native",
+          "template",
+          "starter"
+        ],
+        "releaseNotes": "Initial listing. Replace before submitting to the App Store.",
+        "marketingUrl": "https://example.com",
+        "supportUrl": "https://github.com/user/repo-name/issues",
+        "privacyPolicyUrl": "https://example.com/privacy/"
+      }
+    },
+    "release": {
+      "automaticRelease": false,
+      "phasedRelease": false
+    },
+    "review": {
+      "firstName": "First",
+      "lastName": "Last",
+      "email": "you@example.com",
+      "phone": "+1 555 000 0000",
+      "demoRequired": false,
+      "notes": "Placeholder review notes. The demo app includes onboarding, auth, and a sample feed. Replace before submission."
+    }
+  }
+}

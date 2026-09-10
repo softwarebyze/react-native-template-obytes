@@ -6,7 +6,9 @@ import packageJSON from './package.json';
 const envSchema = z.object({
   EXPO_PUBLIC_APP_ENV: z.enum(['development', 'preview', 'production']),
   EXPO_PUBLIC_NAME: z.string(),
-  EXPO_PUBLIC_SCHEME: z.string(),
+  // URL schemes must be lowercase or EAS Update publish fails:
+  // scheme must match ^[a-z][a-z0-9+.-]*$
+  EXPO_PUBLIC_SCHEME: z.string().regex(/^[a-z][a-z0-9+.-]*$/),
   EXPO_PUBLIC_BUNDLE_ID: z.string(),
   EXPO_PUBLIC_PACKAGE: z.string(),
   EXPO_PUBLIC_VERSION: z.string(),
@@ -35,10 +37,11 @@ const PACKAGES = {
   production: 'com.obytes',
 } as const;
 
+// Display NAME can stay PascalCase; URL schemes cannot (EAS Update).
 const SCHEMES = {
-  development: 'obytesApp',
-  preview: 'obytesApp.preview',
-  production: 'obytesApp',
+  development: 'obytesapp',
+  preview: 'obytesapp.preview',
+  production: 'obytesapp',
 } as const;
 
 const NAME = 'ObytesApp';
@@ -54,7 +57,7 @@ const _env: z.infer<typeof envSchema> = {
   EXPO_PUBLIC_BUNDLE_ID: BUNDLE_IDS[EXPO_PUBLIC_APP_ENV],
   EXPO_PUBLIC_PACKAGE: PACKAGES[EXPO_PUBLIC_APP_ENV],
   EXPO_PUBLIC_VERSION: packageJSON.version,
-  EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL ?? '',
+  EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL ?? 'https://dummyjson.com/',
   EXPO_PUBLIC_ASSOCIATED_DOMAIN: process.env.EXPO_PUBLIC_ASSOCIATED_DOMAIN,
   EXPO_PUBLIC_VAR_NUMBER: Number(process.env.EXPO_PUBLIC_VAR_NUMBER ?? 0),
   EXPO_PUBLIC_VAR_BOOL: process.env.EXPO_PUBLIC_VAR_BOOL === 'true',

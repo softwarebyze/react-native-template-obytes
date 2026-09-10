@@ -47,7 +47,8 @@
       },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "development"
-      }
+      },
+      "channel": "preview"
     },
     "simulator": {
       "environment": "development",
@@ -64,7 +65,19 @@
     }
   },
   "submit": {
-    "preview": {},
-    "production": {}
+    "preview": {
+      "ios": {
+        "bundleIdentifier": "com.obytes.preview",
+        "metadataPath": "./store.preview.config.json"
+      },
+      "android": {}
+    },
+    "production": {
+      "ios": {
+        "bundleIdentifier": "com.obytes",
+        "metadataPath": "./store.config.json"
+      },
+      "android": {}
+    }
   }
 }

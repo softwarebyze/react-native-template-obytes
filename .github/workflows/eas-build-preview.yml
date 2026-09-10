@@ -5,7 +5,9 @@
 # ✍️ Description:
 # This workflow is used to trigger a build on EAS for the QA environment.
 # It will run on every GitHub release published on the repo or can be triggered manually from the actions tab.
-# This workflow will use ./actions/eas-build action to trigger the build on EAS with staging env.
+# Preview iOS builds use --auto-submit → TestFlight (see eas.json submit.preview).
+# eas-build generates store.preview.config.json before --auto-submit so metadataPath exists.
+# Listing metadata is not pushed here (EAS --no-wait). Use eas-metadata-push.yml after ASC has an editable version.
 
 # 🚨 GITHUB SECRETS REQUIRED:
 #         - EXPO_TOKEN: Expo token to authenticate with EAS
@@ -37,10 +39,20 @@ jobs:
       - name: 📦 Setup Node + PNPM + install deps
         uses: ./.github/actions/setup-node-pnpm-install
 
+      - name: 🏷️ Resolve build version label
+        id: version
+        run: |
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            echo "label=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "label=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: ⏱️ EAS Build
         uses: ./.github/actions/eas-build
         with:
           APP_ENV: preview
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          VERSION: ${{ github.event.release.tag_name }}
-          IOS: false # TODO: set as true when IOS account is ready
+          VERSION: ${{ steps.version.outputs.label }}
+          AUTO_SUBMIT: 'true'
+          IOS: true

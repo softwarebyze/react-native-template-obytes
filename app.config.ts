@@ -2,12 +2,24 @@ import type { ConfigContext, ExpoConfig } from '@expo/config';
 
 import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import 'tsx/cjs';
 
-// adding lint exception as we need to import tsx/cjs before env.ts is imported
+// tsx/cjs must load before env.ts so Expo can require the TypeScript module
 // eslint-disable-next-line perfectionist/sort-imports
 import Env from './env';
 
+const brand = JSON.parse(
+  readFileSync(join(__dirname, 'assets/brand/brand.config.json'), 'utf8'),
+) as {
+  splashBackgroundColor: string;
+  adaptiveIconBackgroundColor: string;
+  splashImageWidth: number;
+};
+
+// TODO: set EXPO_ACCOUNT_OWNER after eas init (template default is obytes).
 const EXPO_ACCOUNT_OWNER = 'obytes';
 const EAS_PROJECT_ID = 'c3e1075b-6fe7-4686-aa49-35b46a229044';
 
@@ -36,10 +48,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: 'obytesapp',
   version: Env.EXPO_PUBLIC_VERSION.toString(),
   orientation: 'portrait',
-  icon: './assets/icon.png',
+  icon: './assets/brand/icon.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
+  runtimeVersion: {
+    policy: 'appVersion',
+  },
   updates: {
+    url: `https://u.expo.dev/${EAS_PROJECT_ID}`,
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
@@ -55,22 +71,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#2E3C4B',
+      foregroundImage: './assets/brand/adaptive-foreground.png',
+      backgroundColor: brand.splashBackgroundColor,
     },
     package: Env.EXPO_PUBLIC_PACKAGE,
   },
   web: {
-    favicon: './assets/favicon.png',
+    favicon: './assets/brand/favicon.png',
     bundler: 'metro',
   },
   plugins: [
     [
       'expo-splash-screen',
       {
-        backgroundColor: '#2E3C4B',
-        image: './assets/splash-icon.png',
-        imageWidth: 150,
+        backgroundColor: brand.splashBackgroundColor,
+        image: './assets/brand/splash-icon.png',
+        imageWidth: brand.splashImageWidth,
       },
     ],
     [
@@ -113,10 +129,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     'expo-localization',
     'expo-router',
+    'expo-updates',
     ['app-icon-badge', appIconBadgeConfig],
     ['react-native-edge-to-edge'],
   ],
   extra: {
+    posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
+    posthogHost: process.env.POSTHOG_HOST || 'https://us.i.posthog.com',
+    appEnv: Env.EXPO_PUBLIC_APP_ENV,
     eas: {
       projectId: EAS_PROJECT_ID,
     },

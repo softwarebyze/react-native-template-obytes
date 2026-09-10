@@ -12,6 +12,13 @@
 
 > Welcome to the Obytes Mobile Tribe's Expo / React Native Starter Kit!
 
+## Scaffold from this fork
+
+Do **not** use `npx create-obytes-app` if you want these extras — that CLI always clones upstream `obytes/react-native-template-obytes` and has no template URL flag.
+
+Clone this repo instead, then see `docs/template-sync.md`. Generated apps ship a weekday workflow that opens a PR on *themselves* when this template updates (never auto-merges).
+
+
 ## 🚀 Motivation
 
 Our goal with this starter kit was to streamline the process of building React Native apps, both for our own team and for our clients. We wanted to create a resource that would allow us to create high-quality apps faster and with less effort, while ensuring that all of our projects adhere to the same code standards and architectural principles.
